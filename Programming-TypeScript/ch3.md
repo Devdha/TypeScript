@@ -66,6 +66,7 @@ number는 2^53 까지의 정수를 표현할 수 있지만, bigint는 이보다 
 
 ECMAScript(js)에서 bigint와 number을 연산하면 에러가 발생하며,
 <img width="690" alt="Screen Shot 2023-04-13 at 11 36 36 PM" src="https://user-images.githubusercontent.com/46529663/231794240-ec131311-7058-4fa3-a46a-c9a21073eb1f.png">
+
 TypeScript에서도 bigint와 number 같의 연산을 지원하지 않는다.
 <img width="800" alt="Screen Shot 2023-04-13 at 11 36 42 PM" src="https://user-images.githubusercontent.com/46529663/231794216-bbf91e80-0587-475d-9967-89fa0253885a.png">
 
