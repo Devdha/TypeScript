@@ -39,10 +39,12 @@ unknown 타입의 값은 특정 타입이라고 가정하고 동작하지 않는
 
 boolean 타입은 true, false 두 개의 값을 가지고 비교와 반전 연산을 지원한다.
 
+```typescript
 let a = true // boolean
 const c = true // true
 let e: true = true // true
 let f: true = false // Error
+```
 
 보통 (a, c)와 같은 형태로 사용하며 추가적인 타입 안정성을 얻기 위해 타입 리터럴을 사용하기도 한다.
 
@@ -51,11 +53,15 @@ let f: true = false // Error
 모든 숫자(정수, 소수, 양수, 음수, Infinity, NaN 등)을 포함하는 타입이며, 숫자 관련 연산을 지원한다.
 
 보통 개발자들은 타입스크립트가 number을 추론하도록 아래와 같이 사용한다.
+```typescript
 let a = 343;
 let b = Infinity \* 10;
+```
 
 number 타입임을 명시해야 하는 상황은 거의 없다.
+```typescript
 let e: number = 100;
+```
 
 ### bigint
 
@@ -88,7 +94,7 @@ ES2015에 추가된 기능이다.
 
 symbol 타입 또한, 타입을 추론하게 두거나 특정한 symbol을 정의할 수 있다.
 
-```
+```typescript
 const e = Symbol('e');
 const f: unique symbol = Symbol('f');
 ```
@@ -115,7 +121,7 @@ const f: unique symbol = Symbol('f');
 
 이러한 경우 아래와 같이 프로퍼티를 추가할 수 있다.
 
-```
+```typescript
 let obj: {
     b: number, // number 타입의 b 프로퍼티를 포함
     c? : string, // string 타입의 c 프로퍼티를 포함할 수도 있다.
@@ -137,7 +143,7 @@ let obj: {
 - alias
   변수처럼 타입 별칭이라는 방식으로 타입을 가리킬 수 있다.
 
-```
+```typescript
 type Age = number | string;
 type Person = {
     name: string,
