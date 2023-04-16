@@ -6,7 +6,9 @@
 
   - 따라서, 객체를 다루듯이 함수를 할당, 다른 함수로 전달, 함수를 반환하는 등 객체에서 할 수 있는 작업을 할 수 있다. 자바스크립트에서 함수로 할 수 있는 일이 많고, 이를 통해 타입스크립트는 이를 자신의 타입 시스템에 녹여냈다.
 
-- 일급 객체
+
+  <details>
+  <summary>일급 객체</summary>
 
   - 컴퓨터 프로그래밍 언어 디자인에서, 일급 객체(영어: first-class object)란 다른 객체들에 일반적으로 적용 가능한 연산을 모두 지원하는 객체를 가리킨다. 보통 함수에 인자로 넘기기, 수정하기, 변수에 대입하기와 같은 연산을 지원할 때 일급 객체라고 한다. ref. 위키백과
   - 일급 객체는 아래와 같은 특성을 가진다.
@@ -29,6 +31,8 @@
     are not considered first-class objects, but this is because they are part of the language syntax rather
     than actual objects.
     ```
+ 
+ </details>
 
 - 타입 스크립트의 함수 선언 방법
   - 이름이 있는 함수
