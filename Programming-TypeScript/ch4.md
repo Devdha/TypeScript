@@ -6,7 +6,6 @@
 
   - 따라서, 객체를 다루듯이 함수를 할당, 다른 함수로 전달, 함수를 반환하는 등 객체에서 할 수 있는 작업을 할 수 있다. 자바스크립트에서 함수로 할 수 있는 일이 많고, 이를 통해 타입스크립트는 이를 자신의 타입 시스템에 녹여냈다.
 
-
   <details>
   <summary>일급 객체</summary>
 
@@ -31,7 +30,7 @@
     are not considered first-class objects, but this is because they are part of the language syntax rather
     than actual objects.
     ```
- 
+
  </details>
 
 - 타입 스크립트의 함수 선언 방법
@@ -68,25 +67,156 @@
 ### 선택적 / 기본 매개변수
 
 ```typescript
+// 나머지 매개변수
+// 필수 매개변수 지정 후 뒤에 추가
+function log(message: string, context?: Context);
+
 type Context = {
   appId?: string;
   userId?: string;
 };
 
-function log(message: string, context: Context = {}) {
-  //...
-}
+function log(message: string, context: Context = {});
+// 실무에서는 기본 매개변수를 더 자주 사용
 ```
 
 ### 나머지 매개변수
 
+인수를 여러 개 받는 함수는 배열 형태로 받을 수 있다.
+
+```typescript
+// 배열로 전달하는 방식
+function sum(number: number[]);
+
+// arguments 객체
+// 자바스크립트 런타임이 함수에 자동으로 arguments를 정의하는 요술 같은 방식
+// * 단점: 안전하지 않다.(내부에서 사용하는 모든 타입을 any로 추론)
+function sumVariadic(): number {
+  return Array.from(arguments).reduce(
+    (total: number, n: number) => total + n,
+    0
+  );
+}
+
+// 또한 타입스크립트에서 인수를 받지 않도록 설정했지만, 인수를 받아서 타입 에러를 발생시킨다.
+sumVariadic(1, 2, 3); // Error: Expected 0 arguments, but got 3.
+```
+
+타입스크립트에서는 나머지(rest) 매개변수로 인자를 안전하게 받을 수 있다.
+
+```typescript
+function sumVariadicSafe(...numbers: number[]): number {
+  return numbers.reduce((total, n) => total + n, 0);
+}
+```
+
 ### call, apply, bind
+
+자바스크립트는 괄호 외에도 함수를 호출하는 방법을 제공하는데, 아래 예를 보자
+
+```typescript
+function add(a: number, b: number): number {
+  return a + b;
+}
+
+add(1, 2); // 3
+add.apply(null, [1, 2]); // 3
+add.call(null, 1, 2); // 3
+add.bind(null, 1, 2)(); // 3
+```
+
+- apply: 첫 번째 인자는 this로 사용할 객체, 두 번째 인자는 함수에 전달할 인자를 배열로 전달한다.
+- call: 첫 번째 인자는 this로 사용할 객체, 두 번째 인자부터는 함수에 전달할 인자를 나열한다.
+- bind: 첫 번째 인자는 this로 사용할 객체, 두 번째 인자부터는 함수에 전달할 인자를 나열한다. bind는 함수를 반환한다.(호출하지 않는다.)
 
 ### this의 타입
 
+자바스크립트의 this는 모든 함수에 정의된다.
+하지만 호출 방식에 따라 값이 달라져 자바스크립트의 코드를 이해/사용하기 어렵게 만든다.
+(어제 class 내에서 Map 내부에 함수를 매핑할 수 있도록 만들었는데, 함수 내부에서 this는 map을 가리키고 있었다. 🤯)
+
+```typescript
+let a = {
+  b() {
+    return this;
+  },
+};
+// 위 함수에서 this는 객체 x이다.
+// 하지만 아래와 같이 호출하면 값이 달라진다.
+
+let c = a.b;
+c();
+```
+
+**this의 동작은 예상과 "크게" 다를 수 있다.**
+
+타입스크립트에서는 this의 타입을 첫 번째 매개변수로 선언하는 방식으로 지정할 수 있다.
+
+```typescript
+function f(this: Date) {
+  return this.getDate();
+}
+
+f.call(new Date());
+f(); // Error: this의 타입이 void가 아니기 때문에 에러가 발생한다.
+```
+
+- TSC 플래그: noImplicitThis
+
 ### 제너레이터 함수
 
+- 여러 개의 값을 생성하는 편리한 기능을 제공
+- 함수명 앞에 붙은 \*로 제너레이터임을 표시
+
+```typescript
+function* createFibonacciGenerator() {
+  let a = 0;
+  let b = 1;
+  while (true) {
+    yield a; // yield 키워드로 값을 반환
+    [a, b] = [b, a + b];
+  }
+}
+
+const fibonacciGenerator = createFibonacciGenerator();
+fibonacciGenerator.next(); // { value: 0, done: false }
+fibonacciGenerator.next(); // { value: 1, done: false }
+fibonacciGenerator.next(); // { value: 1, done: false }
+fibonacciGenerator.next(); // { value: 2, done: false }
+fibonacciGenerator.next(); // { value: 3, done: false }
+```
+
 ### 반복자
+
+- iterator
+- 제너레이터와 상생 관계로 제너레이터 함수를 호출하면 Symbol.iterator 프로퍼티와 next 메서드가 정의된 값을 얻는다. -> 이터러블 + 반복자의 결합 -> 제너레이터
+
+```typescript
+let numbers = {
+  *[Symbol.iterator]() {
+    for (let n = 1; n <= 10; n++) {
+      yield n;
+    }
+  },
+};
+// let numbers: { [Symbol.iterator](): IterableIterator<number> }
+```
+
+내장 컬렉션 타입의 반복자도 정의할 수 있다.
+
+```typescript
+// for-of로 반복자 반복
+let numbers = [1, 2, 3];
+for (let n of numbers) {
+  console.log(n);
+}
+
+// 반복자 스프레드
+let allNumbers = [...numbers];
+
+// 반복자 구조 분해 할당
+let [first, second, ...rest] = numbers;
+```
 
 ## 호출 시그니처
 
@@ -109,3 +239,15 @@ function log(message: string, context: Context = {}) {
 ### 제네릭 타입 기본값
 
 ## 타입 주도 개발
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
