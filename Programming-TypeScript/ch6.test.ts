@@ -112,6 +112,17 @@ type Weekday = "Mon" | "Tue" | "Wed" | "Thu" | "Fri";
 type Day = Weekday | "Sat" | "Sun";
 // let nextDay: Record<Weekday, Day> = { Mon: "Tue" };
 
-let nestDay: { [K in Weekday]: Day } = {
-  Mon: "Tue",
-};
+// let nestDay: { [K in Weekday]: Day } = {
+//   Mon: "Tue",
+// };
+
+function isString(a: unknown): boolean {
+  return typeof a === "string";
+}
+
+function parseInput(input: string | number) {
+  let formattedInput: string;
+  if (isString(input)) {
+    formattedInput = input.toUpperCase();
+  }
+}

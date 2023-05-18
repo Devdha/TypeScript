@@ -251,3 +251,5 @@ let [first, second, ...rest] = numbers;
 ```
 
 ```
+
+# arrow folding
