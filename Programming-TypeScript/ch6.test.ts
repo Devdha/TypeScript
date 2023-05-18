@@ -116,13 +116,23 @@ type Day = Weekday | "Sat" | "Sun";
 //   Mon: "Tue",
 // };
 
-function isString(a: unknown): boolean {
-  return typeof a === "string";
-}
+// function isString(a: unknown): boolean {
+//   return typeof a === "string";
+// }
 
-function parseInput(input: string | number) {
-  let formattedInput: string;
-  if (isString(input)) {
-    formattedInput = input.toUpperCase();
-  }
+// function parseInput(input: string | number) {
+//   let formattedInput: string;
+//   if (isString(input)) {
+//     formattedInput = input.toUpperCase();
+//   }
+// }
+
+const a = <T extends unknown[]>(...x: T) => {
+  return x;
+};
+
+const b = a(1, 2, 3);
+
+function isString(a: unknown): a is string {
+  return false;
 }
