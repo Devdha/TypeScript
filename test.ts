@@ -5,6 +5,8 @@ function sumVariadic(): number {
   );
 }
 
+
+
 // sumVariadic(1, 2, 3); // Error: Expected 0 arguments, but got 3.
 
 function sumVariadicSafe(...numbers: number[]): number {
